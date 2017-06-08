@@ -1,0 +1,39 @@
+<Project Sdk="FSharp.NET.Sdk;Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Title>Logary.Adapters.Owin</Title>
+    <Description>Logary Adapter for Owin</Description>
+    <PackageTags>f#, fsharp, logary</PackageTags>
+    <PackageProjectUrl>https://github.com/TheAngryByrd/LogaryTools</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/TheAngryByrd/LogaryTools/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <Authors>MyUsername</Authors>
+    <RepositoryUrl>https://github.com/TheAngryByrd/LogaryTools</RepositoryUrl>
+    <!-- owners is not supported in MSBuild -->
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <Optimize>true</Optimize>
+    <Tailcalls>true</Tailcalls>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Shared/Infrastructure.fs" />
+    <Compile Include="Library.fs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <PackageReference Include="FSharp.Core" Version="4.0.0.*" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.6'">
+    <PackageReference Include="FSharp.Core" Version="4.1.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharp.NET.Sdk" Version="1.0.*" PrivateAssets="All" />
+    <PackageReference Include="Logary" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Owin" Version="3.0.0" />
+  </ItemGroup>
+
+
+</Project>
