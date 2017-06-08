@@ -39,7 +39,8 @@ Target "DotnetRestore" (fun _ ->
 
 Target "DotnetBuild" (fun _ ->
     !! srcGlob
-    |> Seq.iter (fun proj ->
+    |> Seq.toArray
+    |> Array.Parallel.iter (fun proj ->
         DotNetCli.Build (fun c ->
             { c with
                 Project = proj
@@ -131,7 +132,8 @@ Target "WatchTests" (fun _ ->
 
 Target "DotnetPack" (fun _ ->
     !! srcGlob
-    |> Seq.iter (fun proj ->
+    |> Seq.toArray
+    |> Array.Parallel.iter (fun proj ->
         DotNetCli.Pack (fun c ->
             { c with
                 Project = proj
