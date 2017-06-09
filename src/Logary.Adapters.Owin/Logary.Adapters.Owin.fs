@@ -3,7 +3,7 @@ namespace  Microsoft.Owin.Logging
 open System
 open Microsoft.Owin.Logging
 open System.Diagnostics
-open Infrastructure
+open LogaryTools.Infrastructure
 open Logary
 
 type LoggaryLogger (logger) =

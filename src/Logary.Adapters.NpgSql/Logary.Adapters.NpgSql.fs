@@ -3,7 +3,7 @@ namespace  Npgsql.Logging
 
 open System
 open Npgsql.Logging
-open Infrastructure
+open LogaryTools.Infrastructure
 
 type LoggaryLogger (logger) =
     inherit NpgsqlLogger() with

@@ -2,7 +2,7 @@ namespace Hangfire.Logging
 
 open System
 open Hangfire.Logging
-open Infrastructure
+open LogaryTools.Infrastructure
 type LogaryLogger (logger) =
 
     let mapLogLevel level =

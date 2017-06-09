@@ -5,7 +5,7 @@ open System
 open Marten
 open Marten.Services
 open Npgsql
-open Infrastructure
+open LogaryTools.Infrastructure
 open System.Linq
 
 type LoggaryLogger (logger) as this=

@@ -1,4 +1,4 @@
-namespace Infrastructure
+namespace LogaryTools.Infrastructure
 
 [<AutoOpen>]
 module Impl =
