@@ -21,7 +21,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../Shared/Infrastructure.fs" />
-    <Compile Include="Library.fs" />
+    <Compile Include="Logary.Adapters.Hangfire.fs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net45'">
     <PackageReference Include="FSharp.Core" Version="4.0.0.*" />
