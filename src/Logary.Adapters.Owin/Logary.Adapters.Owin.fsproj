@@ -20,7 +20,7 @@
     <Tailcalls>true</Tailcalls>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="../Shared/Infrastructure.fs" />
+    <Compile Include="../Shared/LogaryTools.Infrastructure.fs" />
     <Compile Include="Logary.Adapters.Owin.fs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net45'">
