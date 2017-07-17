@@ -7,13 +7,14 @@ type LogaryLogger (logger) =
 
     let mapLogLevel level =
         match level with
-        | Hangfire.Logging.LogLevel.Trace -> logEx' Logary.LogLevel.Verbose logger
-        | Hangfire.Logging.LogLevel.Debug -> logEx' Logary.LogLevel.Debug logger
-        | Hangfire.Logging.LogLevel.Info -> logEx' Logary.LogLevel.Info logger
-        | Hangfire.Logging.LogLevel.Warn -> logEx' Logary.LogLevel.Warn logger
-        | Hangfire.Logging.LogLevel.Error -> logEx' Logary.LogLevel.Error logger
-        | Hangfire.Logging.LogLevel.Fatal -> logEx' Logary.LogLevel.Fatal logger
-        | _ -> logEx' Logary.LogLevel.Warn logger
+        | Hangfire.Logging.LogLevel.Trace -> Logary.LogLevel.Verbose 
+        | Hangfire.Logging.LogLevel.Debug -> Logary.LogLevel.Debug
+        | Hangfire.Logging.LogLevel.Info ->  Logary.LogLevel.Info
+        | Hangfire.Logging.LogLevel.Warn ->  Logary.LogLevel.Warn
+        | Hangfire.Logging.LogLevel.Error -> Logary.LogLevel.Error
+        | Hangfire.Logging.LogLevel.Fatal -> Logary.LogLevel.Fatal
+        | _ -> Logary.LogLevel.Warn
+        |> (fun level -> logEx' level logger id)
 
     interface ILogProvider with
         member x.GetLogger(name : string) =

@@ -9,9 +9,9 @@ module Impl =
         | Some e -> Message.addExn e
         | _ -> id
 
-
-    let inline logEx' level logger message ex =
+    let inline logEx' level logger configureMessage message ex =
         message
         |> Message.event level 
         |> addExnIfNeeded ex
+        |> configureMessage
         |> Logger.logSimple logger
