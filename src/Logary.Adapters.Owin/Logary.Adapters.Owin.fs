@@ -29,14 +29,17 @@ type LoggaryLogger (logger) =
                              state : obj, 
                              ex : exn, 
                              formatter : Func<obj, Exception, string>) =  
+                let formattedMessage = formatter.Invoke(state,ex)
                 let configureMessage =
                     Message.setField "eventId" eventId
+                    >> Message.setField "message" formattedMessage
+                    >> Message.setFieldFromObject "state" state
             
-                let logger = mapLogLevel eventType configureMessage
-                let formattedMessage = formatter.Invoke(state,ex)
+                let logger = mapLogLevel eventType
+
                 ex
                 |> Option.ofObj
-                |> logger formattedMessage
+                |> logger configureMessage "{eventId} - {message}"
 
                 true
 

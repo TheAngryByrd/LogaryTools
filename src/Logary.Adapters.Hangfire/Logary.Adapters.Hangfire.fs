@@ -2,6 +2,7 @@ namespace Hangfire.Logging
 
 open System
 open Hangfire.Logging
+open Logary
 open LogaryTools.Infrastructure
 type LogaryLogger (logger) =
 
@@ -14,7 +15,7 @@ type LogaryLogger (logger) =
         | Hangfire.Logging.LogLevel.Error -> Logary.LogLevel.Error
         | Hangfire.Logging.LogLevel.Fatal -> Logary.LogLevel.Fatal
         | _ -> Logary.LogLevel.Warn
-        |> (fun level -> logEx' level logger id)
+        |> (fun level -> logEx' level logger)
 
     interface ILogProvider with
         member x.GetLogger(name : string) =
@@ -24,8 +25,11 @@ type LogaryLogger (logger) =
             match (messageFunc,``exception``) with
             | null, null -> true
             | _ ->
+
                 let msg = messageFunc.Invoke()
+                let configurer =
+                    Message.setField "message" msg
                 ``exception``
                 |> Option.ofObj
-                |> mapLogLevel logLevel msg 
+                |> mapLogLevel logLevel configurer "{message}" 
                 true

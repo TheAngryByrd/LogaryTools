@@ -27,7 +27,7 @@ type LoggaryLogger (logger) =
                 >> Message.setField "message" msg
             ex
             |> Option.ofObj
-            |> mapLogLevel level configureMessage (sprintf "%d - %s" connectorId msg)
+            |> mapLogLevel level configureMessage "connectorId: {connectorId} - {message}"
 
 type LogaryLoggerProvider () =
     interface INpgsqlLoggingProvider with

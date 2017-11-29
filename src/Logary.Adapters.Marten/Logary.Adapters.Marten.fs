@@ -24,11 +24,7 @@ type LoggaryLogger (logger) =
         member this.RecordSavedChanges(session: IDocumentSession, commit : IChangeSet) =
             
             let msg =
-                sprintf "Persisted %d updates, %d inserts, and %d deletions"
-                    (commit.Updated.Count())
-                    (commit.Inserted.Count())
-                    (commit.Deleted.Count())
-
+                sprintf "Persisted {Updated} updates, {Inserted} inserts, {Deleted} deletions, {Patches} patched"
             let configureMessage =
                 Message.setField "Updated" (commit.Updated.Count())
                 >> Message.setField "Inserted" (commit.Inserted.Count())
