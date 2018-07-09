@@ -1,4 +1,4 @@
-<Project Sdk="FSharp.NET.Sdk;Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
   </PropertyGroup>
@@ -23,13 +23,9 @@
     <Compile Include="../Shared/LogaryTools.Infrastructure.fs" />
     <Compile Include="Logary.Adapters.AspNetCore.fs" />
   </ItemGroup>
-
-
-
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="4.2.3" />
-    <PackageReference Include="FSharp.NET.Sdk" Version="1.0.*" PrivateAssets="All" />
-    <PackageReference Include="Logary" Version="4.2.0" />
+    <PackageReference Include="FSharp.Core" Version="4.3.4" />
+    <PackageReference Include="Logary" Version="5.0.0-beta.21" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
   </ItemGroup>
 

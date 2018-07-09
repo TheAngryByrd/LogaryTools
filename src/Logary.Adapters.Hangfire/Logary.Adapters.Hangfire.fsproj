@@ -1,6 +1,6 @@
-<Project Sdk="FSharp.NET.Sdk;Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net462</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -23,15 +23,9 @@
     <Compile Include="../Shared/LogaryTools.Infrastructure.fs" />
     <Compile Include="Logary.Adapters.Hangfire.fs" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
-    <PackageReference Include="FSharp.Core" Version="4.0.0.*" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.6'">
-    <PackageReference Include="FSharp.Core" Version="4.1.*" />
-  </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FSharp.NET.Sdk" Version="1.0.*" PrivateAssets="All" />
-    <PackageReference Include="Logary" Version="4.2.0" />
+    <PackageReference Include="Logary" Version="5.0.0-beta.21" />
+    <PackageReference Include="FSharp.Core" Version="4.3.4" />
     <PackageReference Include="HangFire" Version="1.6.13" />
   </ItemGroup>
 

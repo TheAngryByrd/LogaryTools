@@ -1,7 +1,5 @@
 namespace  Marten
 
-
-open System
 open Marten
 open Marten.Services
 open Npgsql
@@ -11,20 +9,18 @@ open Logary
 
 type LoggaryLogger (logger) =
     interface IMartenLogger with
-        member this.StartSession(session : IQuerySession) : IMartenSessionLogger = this :> IMartenSessionLogger
-        member  this.SchemaChange(sql : string) = 
+        member this.StartSession(_session : IQuerySession) : IMartenSessionLogger = this :> IMartenSessionLogger
+        member __.SchemaChange(sql : string) = 
             logEx' Logary.LogLevel.Debug logger (Message.setField "sql" sql) sql None
 
     interface IMartenSessionLogger with
-        member this.LogSuccess(command:NpgsqlCommand) =
+        member __.LogSuccess(command:NpgsqlCommand) =
             logEx' Logary.LogLevel.Debug logger (Message.setField "commandText" command.CommandText) command.CommandText None
 
-        member this.LogFailure(command:NpgsqlCommand, ex : exn) =
+        member __.LogFailure(command:NpgsqlCommand, ex : exn) =
             logEx' Logary.LogLevel.Error logger (Message.setField "commandText" command.CommandText) command.CommandText (Some ex)
-        member this.RecordSavedChanges(session: IDocumentSession, commit : IChangeSet) =
-            
-            let msg =
-                sprintf "Persisted {Updated} updates, {Inserted} inserts, {Deleted} deletions, {Patches} patched"
+        member __.RecordSavedChanges(_session: IDocumentSession, commit : IChangeSet) =
+            let msg = sprintf "Persisted {Updated} updates, {Inserted} inserts, {Deleted} deletions, {Patches} patched"
             let configureMessage =
                 Message.setField "Updated" (commit.Updated.Count())
                 >> Message.setField "Inserted" (commit.Inserted.Count())

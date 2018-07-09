@@ -24,16 +24,16 @@ type LoggaryLogger (logger) =
         |> (fun level -> logEx' level logger)
 
     interface ILogger with
-        override x.WriteCore(eventType : TraceEventType, 
-                             eventId : int,  
-                             state : obj, 
-                             ex : exn, 
-                             formatter : Func<obj, Exception, string>) =  
+        override __.WriteCore(  eventType : TraceEventType, 
+                                eventId : int,  
+                                state : obj, 
+                                ex : exn, 
+                                formatter : Func<obj, Exception, string>) =  
                 let formattedMessage = formatter.Invoke(state,ex)
                 let configureMessage =
                     Message.setField "eventId" eventId
                     >> Message.setField "message" formattedMessage
-                    >> Message.setFieldFromObject "state" state
+                    >> Message.setField "state" state
             
                 let logger = mapLogLevel eventType
 
@@ -45,4 +45,4 @@ type LoggaryLogger (logger) =
 
 type LogaryLoggerProvider () =
     interface ILoggerFactory with
-        member x.Create(name) = Logary.Logging.getLoggerByName(name) |> LoggaryLogger :> ILogger
+        member __.Create(name) = Log.create name |> LoggaryLogger :> ILogger

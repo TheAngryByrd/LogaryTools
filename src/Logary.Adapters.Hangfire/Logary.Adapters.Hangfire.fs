@@ -4,8 +4,8 @@ open System
 open Hangfire.Logging
 open Logary
 open LogaryTools.Infrastructure
-type LogaryLogger (logger) =
 
+module Util =
     let mapLogLevel level =
         match level with
         | Hangfire.Logging.LogLevel.Trace -> Logary.LogLevel.Verbose 
@@ -15,21 +15,21 @@ type LogaryLogger (logger) =
         | Hangfire.Logging.LogLevel.Error -> Logary.LogLevel.Error
         | Hangfire.Logging.LogLevel.Fatal -> Logary.LogLevel.Fatal
         | _ -> Logary.LogLevel.Warn
-        |> (fun level -> logEx' level logger)
+
+type LogaryLogger (logger) =
+    let log level = logEx' level logger
 
     interface ILogProvider with
-        member x.GetLogger(name : string) =
-           Logary.Logging.getLoggerByName(name) |> LogaryLogger :> ILog
+        member __.GetLogger(name : string) = Log.create name |> LogaryLogger :> ILog
+
     interface ILog with
-        member x.Log(logLevel: Hangfire.Logging.LogLevel, messageFunc: Func<string>, ``exception``: exn): bool = 
+        member __.Log(logLevel: Hangfire.Logging.LogLevel, messageFunc: Func<string>, ``exception``: exn): bool = 
             match (messageFunc,``exception``) with
             | null, null -> true
             | _ ->
-
                 let msg = messageFunc.Invoke()
-                let configurer =
-                    Message.setField "message" msg
-                ``exception``
-                |> Option.ofObj
-                |> mapLogLevel logLevel configurer "{message}" 
+                let level = Util.mapLogLevel logLevel
+                let configurer = Message.setField "message" msg
+                let exn = Option.ofObj ``exception``
+                log level configurer "{message}" exn
                 true

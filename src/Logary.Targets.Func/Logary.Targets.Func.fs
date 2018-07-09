@@ -1,51 +1,38 @@
 namespace Logary.Targets
 
-open System.IO
-open System.Runtime.CompilerServices
 open Hopac
 open Hopac.Infixes
 open Logary
 open Logary.Internals
-open Logary.Target
-open Logary.Formatting
-open System.Threading.Tasks
 
 module GenericFunc =
     type GenericFuncConf =
-        { 
-            func : Message -> Job<unit>            
-        }
+        { func : Message -> Job<unit> }
 
-            [<CompiledName "Create">]
-            static member create(f : Message -> Job<unit>  ) =
-                {
-                    /// a generic function for pumping data anywhere
-                    func = f
-                }
+        [<CompiledName "Create">]
+        static member create(f : Message -> Job<unit>  ) = { func = f }
+        
     module internal Impl =
-        let loop (conf : GenericFuncConf) // the conf is specific to your target
-                (ri : RuntimeInfo) 
-                (requests : RingBuffer<_>) 
-                (shutdown : Ch<_>) = 
+        let loop conf (api: TargetAPI) = 
 
             let rec loop () : Job<unit> =
                 Alt.choose [
-                    shutdown ^=> fun ack ->
+                    api.shutdownCh ^=> fun ack ->
                          ack *<= () :> Job<_>
-                    RingBuffer.take requests ^=> function
+                    RingBuffer.take api.requests ^=> function
                         | Log (message, ack) ->
                             job {
                                 do! message |> conf.func
                                 do! ack *<= ()
                                 return! loop ()
                             }
-                        | Flush (ackCh, nack) ->
+                        | Flush (ack, nack) ->
                             job {
-                                do! Ch.give ackCh () <|> nack
+                                do! ack <|> nack
                                 return! loop ()
                             }
                 ] :> Job<_>
             loop ()
     
     [<CompiledName "Create">]
-    let create conf name = TargetUtils.stdNamedTarget (Impl.loop conf) name
+    let create conf name = TargetConf.createSimple (Impl.loop conf) name

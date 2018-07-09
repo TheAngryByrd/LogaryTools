@@ -1,7 +1,5 @@
 namespace  Npgsql.Logging
 
-
-open System
 open Npgsql.Logging
 open LogaryTools.Infrastructure
 open Logary
@@ -19,9 +17,8 @@ type LoggaryLogger (logger) =
             | NpgsqlLogLevel.Fatal -> Logary.LogLevel.Fatal
             | _ -> Logary.LogLevel.Verbose 
             |> (fun level -> logEx' level logger configureMessage )
-        override x.IsEnabled(level : NpgsqlLogLevel) =
-            true
-        override x.Log(level, connectorId, msg, ex) =  
+        override __.IsEnabled(_level : NpgsqlLogLevel) = true
+        override __.Log(level, connectorId, msg, ex) =  
             let configureMessage =
                 Message.setField "connectorId" connectorId
                 >> Message.setField "message" msg
@@ -31,4 +28,4 @@ type LoggaryLogger (logger) =
 
 type LogaryLoggerProvider () =
     interface INpgsqlLoggingProvider with
-        member x.CreateLogger(name) = Logary.Logging.getLoggerByName(name) |> LoggaryLogger :> NpgsqlLogger
+        member __.CreateLogger(name) = Log.create name |> LoggaryLogger :> NpgsqlLogger
