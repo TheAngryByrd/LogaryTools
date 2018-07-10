@@ -20,7 +20,7 @@ type LoggaryLogger (logger) =
         |> (fun level -> logEx' level logger)
 
     interface ILogger with
-        member x.Log(
+        member __.Log(
                         loglevel : Microsoft.Extensions.Logging.LogLevel,
                         eventId : EventId,
                         state : 'a,
@@ -29,23 +29,22 @@ type LoggaryLogger (logger) =
                     ) =
             let formattedMessage = formatter.Invoke(state,ex)
             let configureMessage =
-                    Message.setFieldFromObject "eventId" eventId
+                    Message.setField "eventId" eventId
                     >> Message.setField "message" formattedMessage
-                    >> Message.setFieldFromObject "state" state
+                    >> Message.setField "state" state
             
             let logger = mapLogLevel loglevel configureMessage
 
             ex
             |> Option.ofObj
             |> logger "{eventId} - {message}"
-         member x.IsEnabled _ = true
-         member x.BeginScope _ = {
+         member __.IsEnabled _ = true
+         member __.BeginScope _ = {
              new IDisposable with
-                member x.Dispose () = ()
+                member __.Dispose () = ()
          }
 
 type LogaryLoggerProvider () =
     interface ILoggerProvider with
-        member x.CreateLogger(name) = 
-            Logary.Logging.getLoggerByName(name) |> LoggaryLogger :> ILogger
-        member x.Dispose () = ()
+        member __.CreateLogger(name) = Log.create name |> LoggaryLogger :> ILogger
+        member __.Dispose () = ()
